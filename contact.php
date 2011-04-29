@@ -1,1 +1,2 @@
-<h1>Contact: openenergymonitor.org/nanode</h1>
+<h1>Contact</h1>
+<p>openenergymonitor.org/nanode</p>
