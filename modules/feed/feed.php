@@ -26,7 +26,8 @@ class feed {
                 case "view" :
 		  $userid = $_SESSION['userid'];
                   $variables['title']    = "My feeds:";
-                  $variables['content']  = $this->input_list($userid);
+                  $variables['content']  = $this->apikey($userid);
+                  $variables['content'] .= $this->input_list($userid);
                   $variables['content'] .= $this->input_config($userid);
                   $variables['content'] .= $this->feed_list($userid);   
                 break;
@@ -40,6 +41,37 @@ class feed {
 	    }
         }
         return $variables;
+    }
+
+    function apikey($userid)
+    {
+
+      $out = "<div class='lightbox' style='margin-bottom:20px;'>";
+
+      //------------------------------------------------------------------
+      // Fetch the API key
+      //------------------------------------------------------------------
+      $result = db_query("SELECT apikey FROM users WHERE id=$userid");
+      $row = mysql_fetch_array($result);
+      $apikey = $row['apikey'];
+
+      if (isset($_POST["form"])) {$form = $_POST["form"];} else {$form = 0;}	// NEW API BUTTON
+
+      if (!$apikey || $form==3) {
+        $apikey = md5(uniqid(rand(), true));
+        db_query("UPDATE users SET apikey = '$apikey' WHERE id='$userid'");
+      }
+
+      $out .= "<table><tr><td><b>Your API key: </b>".$apikey."</td>";
+
+      $out .= '<td><form name="newapi" action="view" method="post">';
+      $out .= '<input type="hidden" name="form" value="3">';
+      $out .= '<input type="submit" value="new" ></form></td></table>';
+
+      $testjson = $GLOBALS['systempath']."api/post.php";
+      $out .= "<p><b>API url: </b>".$testjson."</p>";
+      $out .= "</div>";
+      return $out;
     }
  
     //----------------------------------------------------------------------------------------------------
@@ -70,9 +102,7 @@ class feed {
       } 
       else
       {
-        $out .= "<p>You have no inputs, to get started connect up your monitoring hardware by sending data to the following address in the following form, try this example to see what happens:</p>";
-        $testjson = $GLOBALS['systempath']."api/api.php?json={testA:123.4,testB:100}";
-        $out .= "<p><a href='".$testjson."'>".$testjson."</a></p>";
+        $out .= "<p>You have no inputs, to get started connect up your monitoring hardware</p>";
       }
       $out .= "</div>";
       return $out;
@@ -134,6 +164,7 @@ class feed {
       $out .= '<h3>2) Input Configuration:</h3>';
 
       if (isset($_POST["form"])) {$form = $_POST["form"];} else {$form = 0;}
+
 
       if ($form == 1 || $form == 2)
       {
