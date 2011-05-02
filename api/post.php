@@ -12,10 +12,26 @@
 
   //error_reporting(E_ALL);
   //ini_set('display_errors','On');
-  echo "ok";
+  require_once ("../includes/db.php");
+  $error = db_connect();
+  if ($error==2) {echo "<h2>No settings file<h2>"; die;}
+  if ($error==3) {echo "<h2>Database config error<h2>"; die;}
   //-----------------------------------------------------------------------------------------
   // 1) Get json string
   //-----------------------------------------------------------------------------------------
+  if (isset($_GET["apikey"])) {
+    $apikey = $_GET["apikey"];
+    $result = db_query("SELECT id FROM users WHERE apikey='$apikey'");
+    $row = mysql_fetch_array($result);
+
+    if ($row['id']) { $user = $row['id']; } else { echo "crap"; die; }
+
+    echo "ok";
+  }
+  else {echo "crap"; die;}
+
+
+
   $json = $_GET["json"];
   //if ($json)
   //{
@@ -30,12 +46,8 @@
   $datapairs = explode(",", $json);		//Seperate JSON string into individual data pairs. 
   //-----------------------------------------------------------------------------------------
 
-  require_once ("../includes/db.php");
-  $error = db_connect();
-  if ($error==2) {echo "<h2>No settings file<h2>"; die;}
-  if ($error==3) {echo "<h2>Database config error<h2>"; die;}
 
-  $user = 1;
+
 
   $inputs = array();
   //for all inputs
