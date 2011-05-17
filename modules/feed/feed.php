@@ -68,8 +68,9 @@ class feed {
       $out .= '<input type="hidden" name="form" value="3">';
       $out .= '<input type="submit" value="new" ></form></td></table>';
 
-      $testjson = $GLOBALS['systempath']."api/post.php";
-      $out .= "<p><b>API url: </b>".$testjson."</p>";
+      $testjson = $GLOBALS['systempath']."api/post.php?apikey=".$apikey."&json={power:252.4,temperature:15.4}";
+      $out .= "<p><b>API url: </b>".$GLOBALS['systempath']."api/post.php</p>";
+      $out .= "<p><b>Copy this to your web browser or send from a nanode: </b><br/>".$testjson."</p>";
       $out .= "</div>";
       return $out;
     }
