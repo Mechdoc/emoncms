@@ -77,6 +77,10 @@
       $pass1 = $_POST['pass1'];
       $pass2 = $_POST['pass2'];
 
+      $username = mysql_real_escape_string($username);
+      $pass1 = mysql_real_escape_string($pass1);
+      $pass2 = mysql_real_escape_string($pass2);
+
       $out = '';
       if($pass1 != $pass2) $out .= "Passwords dont match";
       if(strlen($username) > 30) $out .= "Username too long";
@@ -139,7 +143,8 @@
     {
       $username = $_POST['username'];
       $password = $_POST['password'];
-     // $username = $db->real_escape_string($username);
+      $username = mysql_real_escape_string($username);
+      $password = mysql_real_escape_string($password);
 
       $result = db_query("SELECT id,password, salt FROM users WHERE username = '$username'");
 
@@ -155,7 +160,7 @@
       else
       {
         //this is a security measure
-        //session_regenerate_id (); 
+        session_regenerate_id(); 
         $_SESSION['valid'] = 1;
         $_SESSION['userid'] = $userData['id'];
       }
