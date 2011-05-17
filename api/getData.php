@@ -55,5 +55,5 @@
   }
   echo json_encode($data);                             //encode the array as a JSON and send it on to the graphing script
 
- // mysql_close($con);                                   //close the mysql database
+  //mysql_close($con);                                   //close the mysql database
 ?>
