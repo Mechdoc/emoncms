@@ -20,7 +20,7 @@ class feed {
     //----------------------------------------------------------------
     function menu() {
 
-       if (isset($GLOBALS['args'][1]))
+       if (isset($GLOBALS['args'][1]) && $_SESSION['valid'])
        {
           switch ($GLOBALS['args'][1]){
                 case "view" :
@@ -39,6 +39,11 @@ class feed {
                 default :
                 break;
 	    }
+        } 
+        else 
+        {
+          $variables['title']    = "My feeds";
+          $variables['content']  = "Please login or register to view this page";
         }
         return $variables;
     }

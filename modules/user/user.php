@@ -111,25 +111,21 @@
     {
       $out="";
 
-     // if (isset($_SESSION['valid']))
-     // {
+      if ($_SESSION['valid'])   $out = '
+      <form name="logout" action="'.$GLOBALS['systempath'].'home" method="post">
+        <input type="hidden" name="logout"/>
+        <label class="loginLabel" >Welcome!</label> <input type="submit" value="Logout" style="float:right;"/>
+      </form>';
+      
 
-      if (!$_SESSION['valid'])  
-      { 
+ if (!$_SESSION['valid'])
         $out = '
         <form name="login" action="'.$GLOBALS['systempath'].'home" method="post">
           <label>Username:</label> <input type="text" name="username" /><br/ >
           <label>Password:</label> <input type="password" name="password" />
           <div style="margin-left:70px;"><input type="submit" value="Login" /> or <a href="'.$GLOBALS['systempath'].'user/register">register</a> </div>
         </form>';
-      }
-
-      if ($_SESSION['valid'])   $out = '
-      <form name="logout" action="'.$GLOBALS['systempath'].'home" method="post">
-        <input type="hidden" name="logout"/>
-        <label class="loginLabel" >Welcome!</label> <input type="submit" value="Logout" style="float:right;"/>
-      </form>';
-      //}
+      
 
       return $out;
     }

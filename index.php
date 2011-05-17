@@ -12,6 +12,7 @@
 
   // Start session
   session_start();
+  if (!isset($_SESSION['valid'])) $_SESSION['valid'] = 0;
 
   error_reporting(E_ALL);
   ini_set('display_errors','on');
