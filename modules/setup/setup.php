@@ -71,7 +71,8 @@
         PRIMARY KEY(id),
         username varchar(30),
         password varchar(64),
-        salt varchar(3)
+        salt varchar(3),
+        apikey varchar(64)
       )"); 
         $out .= "users table created<br/>"; 
       }

@@ -142,6 +142,7 @@ class feed {
           <select name="sel">
           <option value="1">LOD</option>
           <option value="2">kwhd</option>
+          <option value="3">realtime</option>
           </select>';
           $out .= '<input type="submit" value="view" class="buttonLook"/></form></td></tr>';
         }
@@ -288,6 +289,21 @@ class feed {
         src="'.$GLOBALS['systempath'].'vis/ikwh.php?tableid='.$feedid.'&price=0.14"></iframe>');
         $out .= "</div>";
         
+      }
+
+      // If graph type = LOD line graph
+      if ($graph_type == 3)
+      {
+        $out = "<div class='lightbox' style='margin-bottom:20px;'>";
+        $out .= '<iframe id="testG" style="width:100%; height:500px;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+        src="'.$GLOBALS['systempath'].'vis/realtime.php?tableid='.$feedid.'&price=0.12"></iframe>';
+        $out .= "</div>";
+
+        $out .= "<div class='lightbox' style='margin-bottom:20px;'>";
+        $out .= "<h3>Embed this graph</h3>";
+        $out .= htmlspecialchars('<iframe id="testG" style="width:100%; height:500px;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+        src="'.$GLOBALS['systempath'].'vis/realtime.php?tableid='.$feedid.'&price=0.12"></iframe>');
+        $out .= "</div>";
       }
 
       // ? $out .= "</div>";
