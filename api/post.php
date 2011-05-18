@@ -24,15 +24,25 @@
     $result = db_query("SELECT id FROM users WHERE apikey='$apikey'");
     $row = mysql_fetch_array($result);
 
-    if ($row['id']) { $user = $row['id']; } else { echo "crap"; die; }
+    if ($row['id']) { $user = $row['id']; } else { echo "incorrect apikey"; die; }
 
     echo "ok";
   }
-  else {echo "crap"; die;}
+  else {echo "no apikey present"; die;}
 
 
 
   $json = $_GET["json"];
+
+  //---------------------------------------------------------------
+  // Use local computer timestamp if no timestamp is sent with data
+  //---------------------------------------------------------------
+  $time_now = time();
+  if (isset($_GET["time"]))
+  {
+    $time_now = $_GET["time"];
+  }
+  //---------------------------------------------------------------
   //if ($json)
   //{
   //$json = '{"power":"100.0","kwh":"2.3","col":"22.3"}';
@@ -141,8 +151,9 @@
   //---------------------------------------------------------------------------
   function feedInsert($feedid,$value)
   {                             
+    global $time_now;
     $feedname = "feed_".trim($feedid)."";
-    $time = date("Y-n-j H:i:s", time());                        
+    $time = date("Y-n-j H:i:s", $time_now);                        
     db_query("INSERT INTO $feedname (`time`,`data`) VALUES ('$time','$value')");
 
     db_query("UPDATE feeds SET value = '$value', time = '$time' WHERE id='$feedid'");
@@ -161,8 +172,8 @@
 
   function powerTokWh($feedid,$value)
   {
+    global $time_now;
     $feedname = "feed_".trim($feedid)."";
-    $time_now = time();
     $new_kwh = 0;
 
     // Get last value
@@ -186,6 +197,7 @@
 
   function powerTokWhd($feedid,$value)
   {
+    global $time_now;
     $feedname = "feed_".trim($feedid)."";
     $new_kwh = 0;
 
@@ -199,7 +211,7 @@
     {
       $result = db_query("INSERT INTO $feedname (time,data) VALUES ('$time','0.0')");
 
-    $updatetime = date("Y-n-j H:i:s", time());
+    $updatetime = date("Y-n-j H:i:s", $time_now);
     db_query("UPDATE feeds SET value = '0.0', time = '$updatetime' WHERE id='$feedid'");
     }
     else
@@ -208,7 +220,6 @@
       $last_row = mysql_fetch_array($result);
 
       $last_kwh = $last_row['value'];
-      $time_now = time();
       $last_time = strtotime($last_row['time']);
       // kWh calculation
       $time_elapsed = ($time_now - $last_time);
@@ -219,12 +230,13 @@
     // update kwhd feed
     db_query("UPDATE $feedname SET data = '$new_kwh' WHERE time = '$time'");
 
-    $updatetime = date("Y-n-j H:i:s", time());
+    $updatetime = date("Y-n-j H:i:s",     $time_now);
     db_query("UPDATE feeds SET value = '$new_kwh', time = '$updatetime' WHERE id='$feedid'");
   }
 
   function kwhincTokWhd($feedid,$kwh_inc)
   {
+    global $time_now;
     $feedname = "feed_".trim($feedid)."";
     $new_kwh = 0;
 
@@ -238,7 +250,7 @@
     {
       $result = db_query("INSERT INTO $feedname (time,data) VALUES ('$time','0.0')");
 
-    $updatetime = date("Y-n-j H:i:s", time());
+    $updatetime = date("Y-n-j H:i:s", $time_now);
     db_query("UPDATE feeds SET value = '0.0', time = '$updatetime' WHERE id='$feedid'");
     }
     else
@@ -249,12 +261,12 @@
     // update kwhd feed
     db_query("UPDATE $feedname SET data = '$new_kwh' WHERE time = '$time'");
 
-    $updatetime = date("Y-n-j H:i:s", time());
+    $updatetime = date("Y-n-j H:i:s", $time_now);
     db_query("UPDATE feeds SET value = '$new_kwh', time = '$updatetime' WHERE id='$feedid'");
   }
 
   function pumpontime($feedid,$value){
-
+    global $time_now;
     $feedname = "feed_".trim($feedid)."";
     $new_kwh = 0;
 
@@ -268,7 +280,7 @@
     {
       $result = db_query("INSERT INTO $feedname (time,data) VALUES ('$time','0.0')");
 
-      $updatetime = date("Y-n-j H:i:s", time());
+      $updatetime = date("Y-n-j H:i:s", $time_now);
       db_query("UPDATE feeds SET value = '0.0', time = '$updatetime' WHERE id='$feedid'");
     }
     else
@@ -277,7 +289,6 @@
       $last_row = mysql_fetch_array($result);
 
       $last_kwh = $last_row['value'];
-      $time_now = time();
       $last_time = strtotime($last_row['time']);
       // kWh calculation
       $time_elapsed = ($time_now - $last_time);
@@ -287,7 +298,7 @@
     // update kwhd feed
     db_query("UPDATE $feedname SET data = '$new_kwh' WHERE time = '$time'");
 
-    $updatetime = date("Y-n-j H:i:s", time());
+    $updatetime = date("Y-n-j H:i:s", $time_now);
     db_query("UPDATE feeds SET value = '$new_kwh', time = '$updatetime' WHERE id='$feedid'");
 
   }
